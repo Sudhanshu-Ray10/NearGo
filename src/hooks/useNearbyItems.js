@@ -23,36 +23,31 @@ export const useNearbyItems = () => {
 
 
 
-    const filtered = items.filter(item => {
+    const itemsWithDistance = items.map(item => {
+        if (!item.location || !location) return { ...item, distance: null };
+        const dist = calculateDistance(
+            location.latitude,
+            location.longitude,
+            Number(item.location.latitude),
+            Number(item.location.longitude)
+        );
+        return { ...item, distance: dist };
+    });
+
+    const filtered = itemsWithDistance.filter(item => {
       // 1. Exclude own items
-      if (user && item.sellerId === user.uid) {
-          return false;
-      }
+      if (user && item.sellerId === user.uid) return false;
 
       // 2. Check for valid item location & NOT Sold
-    if (item.isSold) return false;
+      if (item.isSold) return false;
+      if (item.distance === null) return false;
 
-    if (
-  !item.location ||
-  item.location.latitude == null ||
-  item.location.longitude == null
-) {
-  return false;
-}
-
-
-      // 3. Distance Check
-      const dist = calculateDistance(
-          location.latitude,
-          location.longitude,
-          Number(item.location.latitude),
-          Number(item.location.longitude)
-      );
-
-      const isNearby = dist <= 50;
-
-      return isNearby;
+      // 3. Distance Check (Default 50km hard limit for "Nearby", user can filter further in UI)
+      return item.distance <= 50;
     });
+
+    // Sort by distance (nearest first)
+    filtered.sort((a, b) => a.distance - b.distance);
 
     setNearbyItems(filtered);
     setLoading(false);

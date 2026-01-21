@@ -141,6 +141,8 @@ export const markRequestDelivered = async (requestId) => {
     }
 };
 
+import { createChat } from './chatService';
+
 export const updateRequestStatus = async (requestId, newStatus) => {
     try {
         const requestRef = doc(db, 'requests', requestId);
@@ -152,12 +154,14 @@ export const updateRequestStatus = async (requestId, newStatus) => {
 
         const currentData = requestSnap.data();
 
-        // 1. If Accepting: Enforce Exclusive Logic
+        // 1. If Accepting: Create Chat & Notify
         if (newStatus === 'accepted') {
-            const itemRef = doc(db, 'items', currentData.itemId);
-            
-            // Mark item as SOLD
-            await updateDoc(itemRef, { isSold: true });
+            // Create Chat Room
+            await createChat(
+                [currentData.buyerId, currentData.sellerId], 
+                currentData.itemId, 
+                currentData.itemTitle
+            );
 
             // Mark this request as ACCEPTED
             await updateDoc(requestRef, { status: 'accepted' });
@@ -165,36 +169,12 @@ export const updateRequestStatus = async (requestId, newStatus) => {
             // Notify Winner
             await addNotification(currentData.buyerId, {
                 type: 'REQUEST_ACCEPTED',
-                message: `Congratulations! Your request for "${currentData.itemTitle}" was accepted!`,
-                itemId: currentData.itemId
+                message: `Seller accepted your chat request for "${currentData.itemTitle}". Go to "Chat" to start messaging!`,
+                itemId: currentData.itemId,
+                actionUrl: '/chat' // Link to chat page
             });
-
-            // Reject all OTHER pending requests for this item
-            const q = query(
-                collection(db, 'requests'),
-                where('itemId', '==', currentData.itemId),
-                where('status', '==', 'pending')
-                // Note: Ensure Firestore Rules allow this, or do it client side cautiously
-            );
             
-            const otherRequestsSnap = await getDocs(q);
-            const batchPromises = otherRequestsSnap.docs
-                .filter(doc => doc.id !== requestId)
-                .map(async (otherDoc) => {
-                    const otherData = otherDoc.data();
-                    
-                    // Update Status to Rejected
-                    await updateDoc(doc(db, 'requests', otherDoc.id), { status: 'rejected' });
-                    
-                    // Notify Loser
-                    await addNotification(otherData.buyerId, {
-                        type: 'REQUEST_REJECTED',
-                        message: `Item Sold: Your request for "${currentData.itemTitle}" was declined because it was sold to another buyer.`,
-                        itemId: currentData.itemId
-                    });
-                });
-
-            await Promise.all(batchPromises);
+            // NOTE: We do NOT mark item as sold yet. User can do that manually later.
 
         } else {
             // 2. Just Rejecting (Simple)
@@ -203,7 +183,7 @@ export const updateRequestStatus = async (requestId, newStatus) => {
             if (newStatus === 'rejected') {
                  await addNotification(currentData.buyerId, {
                     type: 'REQUEST_REJECTED',
-                    message: `Your request for "${currentData.itemTitle}" was declined.`,
+                    message: `Your chat request for "${currentData.itemTitle}" was declined.`,
                     itemId: currentData.itemId
                 });
             }

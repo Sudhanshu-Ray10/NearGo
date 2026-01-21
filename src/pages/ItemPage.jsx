@@ -94,7 +94,7 @@ const ItemPage = () => {
     if (selectedCategory !== 'All' && item.category !== selectedCategory) return false;
     if (minPrice && item.price < Number(minPrice)) return false;
     if (maxPrice && item.price > Number(maxPrice)) return false;
-    if (item.distance > maxDistance) return false;
+    if (item.distance !== null && item.distance > Number(maxDistance)) return false;
     return true;
   });
 

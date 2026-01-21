@@ -19,8 +19,9 @@ import {
   ShoppingBag,
   Package,
   Bell,
-  Menu, // New
-  X // New
+  Menu,
+  X,
+  MessageCircle
 } from "lucide-react";
 
 import { subscribeToNotifications } from "../../services/notificationService";
@@ -486,13 +487,21 @@ const Navbar = () => {
                 </Link>
 
                 <Link
+                  to="/chat"
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item"
+                >
+                  <MessageCircle size={18} className="text-gray-400 group-hover/item:text-blue-600"/>
+                  My Chats
+                </Link>
+
+                <Link
                   to="/orders"
                   className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item"
                 >
                   <Package size={18} className="text-gray-400 group-hover/item:text-blue-600"/>
                   My Orders
                 </Link>
-
+                
                 <Link
                   to="/wishlist"
                   className="flex items-center gap-3 w-full px-4 py-3 hover:bg-pink-50 rounded-xl text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors group/item"
@@ -606,6 +615,9 @@ const Navbar = () => {
                          </Link>
                          <Link to="/orders" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl font-medium text-gray-700">
                              <Package size={20} /> My Orders
+                         </Link>
+                         <Link to="/chat" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl font-medium text-gray-700">
+                             <MessageCircle size={20} /> My Chats
                          </Link>
                          <Link to="/wishlist" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl font-medium text-gray-700">
                              <Heart size={20} /> Wishlist
