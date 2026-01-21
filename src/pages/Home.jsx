@@ -25,7 +25,7 @@ const Home = () => {
       <CategoriesGrid />
 
       {/* 3. Trending / Nearby Items (Distinct Background) */}
-      <section className="py-20 bg-white relative">
+      <section className="py-20 bg-slate-100 relative">
         {/* Subtle decorative background element */}
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-blue-50/50 to-transparent pointer-events-none"></div>
 

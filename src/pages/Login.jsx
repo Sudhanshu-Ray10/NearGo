@@ -9,8 +9,13 @@ const Login = () => {
   const [step, setStep] = useState('PHONE'); // PHONE or OTP
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { auth } = useAuth();
+  const { auth, devLogin } = useAuth();
   const navigate = useNavigate();
+
+  const handleDevLogin = () => {
+      devLogin();
+      navigate('/');
+  };
 
   useEffect(() => {
     return () => {
@@ -119,6 +124,13 @@ const Login = () => {
               className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
             >
               {loading ? 'Sending...' : 'Send OTP'}
+            </button>
+            <button
+                type="button"
+                onClick={handleDevLogin}
+                className="w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-900 mt-4 font-mono text-sm"
+            >
+                [DEV] Bypass Auth
             </button>
           </form>
         )}

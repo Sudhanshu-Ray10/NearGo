@@ -28,7 +28,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/items" element={<ItemPage />} />
-          <Route path="/items/:id" element={<div className="container mx-auto py-8"><ItemDetails item={{}}/></div>} /> {/* Placeholder for details page logic */}
+          <Route path="/items/:id" element={<ItemDetails />} />
           
           <Route
             path="/sell"

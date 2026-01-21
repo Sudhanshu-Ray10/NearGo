@@ -5,6 +5,10 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../../hooks/useAuth';
 import { useAuthModal } from '../../context/AuthModalContext';
 
+import guitarImg from '../../assets/images/guitar.png';
+import bicycleImg from '../../assets/images/bicycle.png';
+import cameraImg from '../../assets/images/camera.png';
+import sofaImg from '../../assets/images/sofa.png';
 const HeroSection = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -114,14 +118,14 @@ const HeroSection = () => {
                     <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/20 shadow-xl transform hover:scale-105 transition-all">
                         <div className="h-40 bg-gray-200/20 rounded-xl mb-3 overflow-hidden">
                              {/* Placeholder for item image */}
-                             <div className="w-full h-full flex items-center justify-center text-4xl">🎸</div>
+                             <img src={guitarImg} alt="Guitar" className="w-full h-full object-cover" />
                         </div>
                         <div className="h-4 w-3/4 bg-white/20 rounded mb-2"></div>
                         <div className="h-3 w-1/2 bg-white/10 rounded"></div>
                     </div>
                     <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/20 shadow-xl transform hover:scale-105 transition-all">
                         <div className="h-48 bg-gray-200/20 rounded-xl mb-3 overflow-hidden">
-                              <div className="w-full h-full flex items-center justify-center text-4xl">🚲</div>
+                              <img src={bicycleImg} alt="Bicycle" className="w-full h-full object-cover" />
                         </div>
                         <div className="h-4 w-3/4 bg-white/20 rounded mb-2"></div>
                         <div className="h-3 w-1/2 bg-white/10 rounded"></div>
@@ -130,14 +134,14 @@ const HeroSection = () => {
                 <div className="space-y-4">
                     <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/20 shadow-xl transform hover:scale-105 transition-all">
                         <div className="h-48 bg-gray-200/20 rounded-xl mb-3 overflow-hidden">
-                             <div className="w-full h-full flex items-center justify-center text-4xl">📸</div>
+                             <img src={cameraImg} alt="Camera" className="w-full h-full object-cover" />
                         </div>
                         <div className="h-4 w-3/4 bg-white/20 rounded mb-2"></div>
                         <div className="h-3 w-1/2 bg-white/10 rounded"></div>
                     </div>
                     <div className="bg-white/10 backdrop-blur-lg p-4 rounded-2xl border border-white/20 shadow-xl transform hover:scale-105 transition-all">
                         <div className="h-40 bg-gray-200/20 rounded-xl mb-3 overflow-hidden">
-                             <div className="w-full h-full flex items-center justify-center text-4xl">🛋️</div>
+                             <img src={sofaImg} alt="Sofa" className="w-full h-full object-cover" />
                         </div>
                         <div className="h-4 w-3/4 bg-white/20 rounded mb-2"></div>
                         <div className="h-3 w-1/2 bg-white/10 rounded"></div>

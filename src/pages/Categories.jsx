@@ -29,15 +29,16 @@ const Categories = () => {
         { id: 'electronics', name: 'Electronics', icon: Camera, gradient: 'from-purple-500 to-violet-400', count: '2.5k' },
         { id: 'books', name: 'Books', icon: Book, gradient: 'from-yellow-400 to-amber-300', count: '500+' },
         { id: 'fashion', name: 'Fashion', icon: Shirt, gradient: 'from-pink-500 to-rose-400', count: '3.1k' },
-        { id: 'gaming', name: 'Gaming', icon: Gamepad2, gradient: 'from-red-500 to-red-400', count: '800' },
-        { id: 'services', name: 'Services', icon: Briefcase, gradient: 'from-indigo-500 to-blue-500', count: '150' },
         
         { id: 'sports', name: 'Sports', icon: Dumbbell, gradient: 'from-teal-400 to-cyan-400', count: '320' },
         { id: 'cars', name: 'Cars', icon: Car, gradient: 'from-slate-600 to-slate-400', count: '120' },
-        { id: 'properties', name: 'Properties', icon: Home, gradient: 'from-emerald-600 to-teal-500', count: '50' },
         { id: 'computers', name: 'Computers', icon: Monitor, gradient: 'from-blue-600 to-indigo-500', count: '900' },
         { id: 'appliances', name: 'Appliances', icon: Coffee, gradient: 'from-orange-600 to-red-500', count: '600' },
     ];
+
+    React.useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handleCategoryClick = (category) => {
         navigate(`/items?search=${category}`);

@@ -31,11 +31,24 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    // Check if it's a dev user (no uid from firebase or specific flag)
+    if (user && user.isDev) {
+        setUser(null);
+        return Promise.resolve();
+    }
     return signOut(auth);
   };
 
+  const devLogin = () => {
+      setUser({
+          uid: 'dev-user-123',
+          phoneNumber: '+919876543210',
+          isDev: true
+      });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, auth, logout, loading }}>
+    <AuthContext.Provider value={{ user, auth, logout, loading, devLogin }}>
       {children}
     </AuthContext.Provider>
   );

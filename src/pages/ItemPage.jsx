@@ -18,14 +18,71 @@ const ItemPage = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
 
+  // Scroll to top on mount
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Sync Category with Search Query if it matches
+  React.useEffect(() => {
+    if (searchQuery) {
+        // Simple heuristic: if query is a simple word, try setting it as category
+        // In a real app, check against validCategories list
+        const formatted = searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1).toLowerCase();
+        // Assuming "Mobiles", "Furniture" etc. 
+        // We might want to just set it if it matches known ones, or keep it as text search
+        // For now, let's treat the search param as a potential category trigger
+        // The user specifically asked for "filter category that option be automatically opted"
+        
+        // Let's rely on the CategoryFilter to likely have these options. 
+        // We'll set it, but we need to match the case.
+        // For now, let's just use the query directly if we want to force it, 
+        // OR distinct logic: Only set category if it was explicitly passed as a category intent?
+        // But the previous page sends `?search=categoryID`.
+        
+        // Let's map IDs to display names if needed, or just set raw.
+        // The previous code sent IDs like 'mobiles'. The Filter likely expects 'Mobiles'.
+        
+        const categoryMap = {
+            'mobiles': 'Mobiles',
+            'furniture': 'Furniture',
+            'bikes': 'Bikes',
+            'electronics': 'Electronics',
+            'books': 'Books',
+            'fashion': 'Fashion',
+            'gaming': 'Gaming',
+            'services': 'Services',
+            'sports': 'Sports',
+            'cars': 'Cars',
+            'properties': 'Properties',
+            'computers': 'Computers',
+            'appliances': 'Appliances'
+        };
+
+        if (categoryMap[searchQuery.toLowerCase()]) {
+            setSelectedCategory(categoryMap[searchQuery.toLowerCase()]);
+        }
+    }
+  }, [searchQuery]);
+
   const handlePriceChange = (type, value) => {
     if (type === 'min') setMinPrice(value);
     else setMaxPrice(value);
   };
 
   const filteredItems = items.filter(item => {
-    // 1. Search Filter (Global)
-    if (searchQuery) {
+    // 1. Search Filter (Global) - ONLY apply if we didn't turn it into a Category selection
+    // If selectedCategory is SET (and not All), we rely on that.
+    // But if the user typed "iPhone", we want text search.
+    // The previous page sends ?search=mobiles.
+    // So if we mapped it to a category, we DON'T do text search on "mobiles" string, 
+    // we just use the category filter.
+    
+    // Check if current search query matches the selected category (meaning it was a category nav)
+    const isCategoryNav = selectedCategory !== 'All' && 
+                          selectedCategory.toLowerCase() === searchQuery.toLowerCase();
+
+    if (searchQuery && !isCategoryNav) {
         const q = searchQuery.toLowerCase();
         const matchTitle = item.title.toLowerCase().includes(q);
         const matchDesc = item.description?.toLowerCase().includes(q);

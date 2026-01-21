@@ -21,15 +21,50 @@ import {
   Bell // New
 } from "lucide-react";
 
+import { subscribeToNotifications } from "../../services/notificationService";
+
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const { getLocation, location: userCoords } = useUserLocation();
   const { openModal } = useAuthModal();
   const { totalItems } = useCart();
-
   const [locationOpen, setLocationOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState("India");
+  const { getLocation, location: userCoords, updateLocation, detectLocation } = useUserLocation();
+  
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+
+  useEffect(() => {
+      if (!user) return;
+      const unsubscribe = subscribeToNotifications(user.uid, (data) => {
+          const unread = data.filter(n => !n.read).length;
+          setUnreadNotifications(unread);
+      });
+      return () => unsubscribe();
+  }, [user]);
+  
+  // Initialize from Context or LocalStorage or Default
+  const [selectedLocation, setSelectedLocation] = useState(() => {
+      if (userCoords && userCoords.name) return userCoords.name;
+      const saved = localStorage.getItem('nearbuy_location');
+      if (saved) {
+          try {
+              const parsed = JSON.parse(saved);
+              if (parsed.name) return parsed.name;
+          } catch(e) {}
+      }
+      return "India";
+  });
+
+  // Keep in sync if Context updates (e.g. Detect Location clicked)
+  useEffect(() => {
+      if (userCoords && userCoords.name) {
+          setSelectedLocation(userCoords.name);
+      } else if (userCoords && !userCoords.name) {
+          // If we have coords but no name (e.g. raw GPS), try to reverse geocode or show "Current Location"
+          // For now, let's stick to "Current Location" to avoid excessive API calls if name isn't set.
+          // Or we can let the handleDetectLocation logic handle the naming.
+      }
+  }, [userCoords]);
   const [locationQuery, setLocationQuery] = useState("");
   const [filteredLocations, setFilteredLocations] = useState(INDIAN_CITIES.slice(0, 8));
   const [isSearchingPincode, setIsSearchingPincode] = useState(false);
@@ -157,46 +192,73 @@ const Navbar = () => {
     }
   }, [locationQuery]);
 
-  const handleSelectLocation = (loc) => {
-    setSelectedLocation(loc);
-    setLocationOpen(false);
-    setLocationQuery(""); // Reset
+
+
+  const handleSelectLocation = async (locName) => {
+    // Ideally we need coordinates for the city "Pune" or "Mumbai".
+    // For now we will mock them for major cities or use a geocode API if available.
+    // Since we don't have a reliable free forward geocoding API set up for random text like "Pune",
+    // We will attempt to use OpenStreetMap's Nominatim (Free)
+    
+    setIsSearchingPincode(true);
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locName)}`);
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            const { lat, lon, display_name } = data[0];
+            updateLocation({
+                latitude: parseFloat(lat),
+                longitude: parseFloat(lon),
+                name: locName
+            });
+            setSelectedLocation(locName);
+        } else {
+            console.warn("Could not find coordinates for", locName);
+            // Fallback: Just set the name, but coordinates might be stale/null? 
+            // Ideally we shouldn't update if we can't find coords.
+            alert("Could not find location details. Please try another.");
+        }
+    } catch (e) {
+        console.error("Forward geocode failed", e);
+        alert("Failed to set location. Please check internet connection.");
+    } finally {
+        setIsSearchingPincode(false);
+        setLocationOpen(false);
+        setLocationQuery(""); 
+    }
   };
 
   const handleDetectLocation = () => {
-    setIsSearchingPincode(true); // Reuse loading state for spinner
-    getLocation(); 
+    setIsSearchingPincode(true); 
+    detectLocation(); // Uses the Context function now which handles logic + reset
+    
+    // We can update the UI Label asynchronously
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (position) => {
              const { latitude, longitude } = position.coords;
              try {
-                 // Free Reverse Geocoding API
                  const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
                  const data = await response.json();
                  
                  if (data) {
-                     // Prioritize City > Locality
                      const city = data.city || data.locality || data.principalSubdivision || "Current Location";
                      const state = data.principalSubdivision || "";
                      const formatted = state ? `${city}, ${state}` : city;
                      setSelectedLocation(formatted);
-                 } else {
-                     setSelectedLocation("Current Location");
                  }
              } catch (error) {
                  console.error("Reverse geocode failed:", error);
-                 setSelectedLocation("Current Location");
+                 setSelectedLocation("My Location");
              } finally {
                  setIsSearchingPincode(false);
                  setLocationOpen(false);
              }
-        }, (error) => {
-            console.error("Geolocation error:", error);
-            alert("Location access denied. Please enable it.");
-            setIsSearchingPincode(false);
-        });
+        }, () => {
+             // Error already handled in Context, just cleanup UI
+             setIsSearchingPincode(false);
+         });
     } else {
-        alert("Geolocation not supported");
         setIsSearchingPincode(false);
     }
   };
@@ -354,10 +416,25 @@ const Navbar = () => {
         </div>
 
         {/* RIGHT */}
-        {/* RIGHT */}
         <div className="flex items-center gap-6">
 
-          {/* Cart (Replaces Wishlist) */}
+          {/* Notifications */}
+          <Link
+            to="/notifications"
+            className="relative flex flex-col items-center gap-0.5 text-gray-600 hover:text-yellow-600 transition-colors group"
+          >
+            <div className="p-2 rounded-full group-hover:bg-yellow-50 transition-colors">
+                <Bell size={20} className="group-hover:scale-110 transition-transform" />
+                {unreadNotifications > 0 && (
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+                        {unreadNotifications}
+                    </span>
+                )}
+            </div>
+            <span className="text-[10px] font-semibold uppercase tracking-wide">Alerts</span>
+          </Link>
+
+          {/* Cart */}
           <Link
             to="/cart"
             className="relative flex flex-col items-center gap-0.5 text-gray-600 hover:text-blue-600 transition-colors group"

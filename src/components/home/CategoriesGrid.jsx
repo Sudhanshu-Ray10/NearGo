@@ -10,7 +10,9 @@ import {
     Shirt, 
     Gamepad2,
     Briefcase,
-    Watch
+    Watch,
+    Dumbbell,
+    Monitor
 } from 'lucide-react';
 
 const CategoriesGrid = () => {
@@ -23,8 +25,8 @@ const CategoriesGrid = () => {
         { id: 'electronics', name: 'Electronics', icon: Camera, gradient: 'from-purple-500 to-violet-400' },
         { id: 'books', name: 'Books', icon: Book, gradient: 'from-yellow-400 to-amber-300' },
         { id: 'fashion', name: 'Fashion', icon: Shirt, gradient: 'from-pink-500 to-rose-400' },
-        { id: 'gaming', name: 'Gaming', icon: Gamepad2, gradient: 'from-red-500 to-red-400' },
-        { id: 'services', name: 'Services', icon: Briefcase, gradient: 'from-indigo-500 to-blue-500' },
+        { id: 'sports', name: 'Sports', icon: Dumbbell, gradient: 'from-teal-400 to-cyan-400' },
+        { id: 'computers', name: 'Computers', icon: Monitor, gradient: 'from-blue-600 to-indigo-500' },
     ];
 
     const handleCategoryClick = (category) => {

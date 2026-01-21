@@ -3,7 +3,9 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { LocationProvider } from './context/LocationContext';
 import { AuthModalProvider } from './context/AuthModalContext';
-import { CartProvider } from './context/CartContext'; // Import
+import { CartProvider } from './context/CartContext';
+import { ItemProvider } from './context/ItemContext';
+import { WishlistProvider } from './context/WishlistContext';
 import AuthModal from './components/auth/AuthModal';
 import AppRoutes from './routes/AppRoutes';
 
@@ -14,8 +16,12 @@ function App() {
         <LocationProvider>
           <AuthModalProvider>
             <CartProvider>
-                <AppRoutes />
-                <AuthModal />
+              <ItemProvider>
+                <WishlistProvider>
+                  <AppRoutes />
+                  <AuthModal />
+                </WishlistProvider>
+              </ItemProvider>
             </CartProvider>
           </AuthModalProvider>
         </LocationProvider>
