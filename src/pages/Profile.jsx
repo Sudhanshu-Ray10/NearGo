@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { db, storage } from '../services/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { updateProfile, updateEmail } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { Camera, User, Mail, Save, Loader2, RotateCw, Trash2, Tag } from 'lucide-react';
+import { Camera, User, Mail, Save, Loader2, RotateCw, Trash2, Tag, X } from 'lucide-react';
 import { useItems } from '../context/ItemContext';
 
 const Profile = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { items, deleteItem } = useItems();
   
   const [loading, setLoading] = useState(true);
@@ -152,7 +154,12 @@ const Profile = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">My Account</h1>
+        <div className="flex items-center gap-4 mb-8">
+            <button onClick={() => navigate('/')} className="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full">
+                <X size={24} />
+            </button>
+            <h1 className="text-3xl font-bold text-gray-800">My Account</h1>
+        </div>
 
         {/* Tabs */}
         <div className="flex gap-6 mb-6 border-b border-gray-200">

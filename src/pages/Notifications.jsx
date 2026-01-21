@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, ShoppingBag, Tag, MessageSquare, Info, Check, X, Loader2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { subscribeToNotifications, updateNotification, markAllNotificationsAsRead } from '../services/notificationService';
 import { updateRequestStatus } from '../services/requestService';
 
@@ -16,6 +17,7 @@ const ICON_MAP = {
 
 const Notifications = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState(null);
@@ -71,7 +73,12 @@ const Notifications = () => {
     return (
         <div className="container mx-auto px-4 py-8 max-w-3xl">
             <div className="flex items-center justify-between mb-8">
-                <h1 className="text-3xl font-bold">Notifications</h1>
+                <div className="flex items-center gap-4">
+                    <button onClick={() => navigate('/')} className="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full">
+                        <X size={24} />
+                    </button>
+                    <h1 className="text-3xl font-bold">Notifications</h1>
+                </div>
                 {notifications.some(n => !n.read) && (
                     <button 
                         onClick={handleMarkAllRead}

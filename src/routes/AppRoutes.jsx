@@ -17,6 +17,7 @@ import Cart from '../pages/Cart'; // New
 import Orders from '../pages/Orders'; // New
 import Notifications from '../pages/Notifications'; // New
 import Categories from '../pages/Categories'; // New Page
+import Wishlist from '../pages/Wishlist'; // New Page
 import ItemDetails from '../components/items/ItemDetails'; // Or page wrapper
 
 const AppRoutes = () => {
@@ -63,6 +64,7 @@ const AppRoutes = () => {
             }
           />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/categories" element={<Categories />} />
           <Route
             path="/orders"

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Truck, CheckCircle, Clock, XCircle, Loader2 } from 'lucide-react';
+import { Package, Truck, CheckCircle, Clock, XCircle, Loader2, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom'; // Added
 import { getBuyerRequests, markRequestDelivered } from '../services/requestService';
 
 const Orders = () => {
   const { user } = useAuth();
+  const navigate = useNavigate(); // Added
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(null);
@@ -59,7 +61,12 @@ const Orders = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8">My Orders</h1>
+      <div className="flex items-center gap-4 mb-8">
+          <button onClick={() => navigate('/')} className="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full">
+              <X size={24} />
+          </button>
+          <h1 className="text-3xl font-bold">My Orders</h1>
+      </div>
       
       {orders.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
