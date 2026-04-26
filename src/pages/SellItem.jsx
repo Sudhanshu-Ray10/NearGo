@@ -123,7 +123,7 @@ const SellItem = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-20 dark:bg-slate-950">
       {/* Premium Header Background */}
       <div className="bg-slate-900 h-64 sm:h-80 relative overflow-hidden">
           {/* Abstract Background Shapes */}
@@ -156,31 +156,31 @@ const SellItem = () => {
 
       {/* Main Content Card */}
       <div className="container mx-auto px-4 -mt-16 relative z-20 max-w-3xl">
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8 space-y-8 animate-in slide-in-from-bottom-5 duration-300">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8 space-y-8 animate-in slide-in-from-bottom-5 duration-300 dark:bg-slate-900 dark:border-slate-800">
             
             {/* Location Banner */}
-            <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-4 items-start">
-                <div className="p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0">
+            <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex gap-4 items-start dark:bg-blue-900/20 dark:border-blue-900/40">
+                <div className="p-2 bg-blue-100 text-blue-600 rounded-lg shrink-0 dark:bg-blue-900/50 dark:text-blue-400">
                     <MapPin size={20} />
                 </div>
                 <div>
-                    <h3 className="font-semibold text-blue-900">Posting Location</h3>
-                    <p className="text-sm text-blue-700/80 mt-1">
-                        Currently detected near: <span className="font-medium bg-blue-100 px-2 py-0.5 rounded text-blue-800">{location ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}` : "Detecting..."}</span>
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-300">Posting Location</h3>
+                    <p className="text-sm text-blue-700/80 mt-1 dark:text-blue-400/80">
+                        Currently detected near: <span className="font-medium bg-blue-100 px-2 py-0.5 rounded text-blue-800 dark:bg-blue-900/50 dark:text-blue-300">{location ? `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}` : "Detecting..."}</span>
                     </p>
-                    <p className="text-xs text-blue-600/70 mt-2">Visible to buyers within 5 km of this location.</p>
+                    <p className="text-xs text-blue-600/70 mt-2 dark:text-blue-400/60">Visible to buyers within 5 km of this location.</p>
                 </div>
             </div>
 
             {/* Basic Details */}
             <div className="space-y-6">
-                <h3 className="text-lg font-bold text-gray-800 border-b pb-2 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-800 border-b pb-2 flex items-center gap-2 dark:text-white dark:border-slate-800">
                     <FileText size={20} className="text-blue-600" /> Item Details
                 </h3>
                 
                 <div className="grid md:grid-cols-2 gap-6">
                     <div className="col-span-2">
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Title</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2 dark:text-gray-300">Title</label>
                         <div className="relative group">
                             <Tag className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={18} />
                             <input
@@ -188,7 +188,7 @@ const SellItem = () => {
                                 name="title"
                                 value={formData.title}
                                 onChange={handleChange}
-                                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+                                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                                 required
                                 placeholder="What are you selling?"
                             />
@@ -196,14 +196,14 @@ const SellItem = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2 dark:text-gray-300">Category</label>
                         <div className="relative group">
                             <LayoutGrid className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" size={18} />
                             <select
                                 name="category"
                                 value={formData.category}
                                 onChange={handleChange}
-                                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium appearance-none cursor-pointer"
+                                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium appearance-none cursor-pointer dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                             >
                                 <option value="Electronics">Electronics</option>
                                 <option value="Furniture">Furniture</option>
@@ -224,7 +224,7 @@ const SellItem = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Price</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2 dark:text-gray-300">Price</label>
                         <div className="relative group">
                             <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-600 transition-colors" size={18} />
                             <input
@@ -232,7 +232,7 @@ const SellItem = () => {
                                 name="price"
                                 value={formData.price}
                                 onChange={handleChange}
-                                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all font-medium"
+                                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all font-medium dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                                 required
                                 placeholder="0.00"
                             />
@@ -240,12 +240,12 @@ const SellItem = () => {
                     </div>
 
                     <div className="col-span-2">
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2 dark:text-gray-300">Description</label>
                         <textarea
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium h-32 resize-none"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium h-32 resize-none dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                             required
                             placeholder="Describe condition, features, age, and reason for selling..."
                         />

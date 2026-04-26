@@ -34,14 +34,14 @@ const CategoriesGrid = () => {
     };
 
     return (
-        <section className="py-16 bg-white border-b border-gray-100">
+        <section className="py-16 bg-white border-b border-gray-100 dark:bg-slate-900 dark:border-slate-800">
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-end mb-10">
                     <div>
-                        <h2 className="text-3xl font-bold text-gray-900">Browse Categories</h2>
-                        <p className="text-gray-500 mt-2">Explore top categories in your city</p>
+                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Browse Categories</h2>
+                        <p className="text-gray-500 mt-2 dark:text-gray-400">Explore top categories in your city</p>
                     </div>
-                    <button onClick={() => navigate('/categories')} className="hidden md:block text-blue-600 font-semibold hover:underline">
+                    <button onClick={() => navigate('/categories')} className="hidden md:block text-blue-600 font-semibold hover:underline dark:text-blue-400">
                         View All
                     </button>
                 </div>
@@ -55,11 +55,11 @@ const CategoriesGrid = () => {
                             className="flex flex-col items-center gap-3 min-w-[80px] cursor-pointer group"
                         >
                             <div className={`w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-tr ${cat.gradient} p-0.5 shadow-lg group-hover:shadow-xl group-hover:-translate-y-1 transition-all duration-300`}>
-                                <div className="w-full h-full bg-white rounded-full flex items-center justify-center border-4 border-transparent group-hover:border-white/50 transition-all">
-                                    <cat.icon size={32} className="text-gray-700 group-hover:scale-110 transition-transform duration-300" />
+                                <div className="w-full h-full bg-white rounded-full flex items-center justify-center border-4 border-transparent group-hover:border-white/50 transition-all dark:bg-slate-800 dark:group-hover:border-slate-700/50">
+                                    <cat.icon size={32} className="text-gray-700 group-hover:scale-110 transition-transform duration-300 dark:text-gray-200" />
                                 </div>
                             </div>
-                            <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-600 transition-colors whitespace-nowrap">
+                            <span className="text-sm font-semibold text-gray-700 group-hover:text-blue-600 transition-colors whitespace-nowrap dark:text-gray-300 dark:group-hover:text-blue-400">
                                 {cat.name}
                             </span>
                         </div>

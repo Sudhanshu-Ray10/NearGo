@@ -130,7 +130,20 @@ const AuthModal = () => {
         }, 1500);
     } catch (error) {
         console.error("Error with Google Login:", error);
-        alert("Google Login Failed: " + error.message);
+        let message = error.message;
+        
+        // Handle specific Firebase Auth errors
+        if (error.code === 'auth/unauthorized-domain') {
+            message = "This domain is not authorized in Firebase. Please add your Netlify URL to the 'Authorized domains' in Firebase Console (Authentication > Settings).";
+        } else if (error.code === 'auth/popup-blocked') {
+            message = "Login popup was blocked by your browser. Please allow popups for this site.";
+        } else if (error.code === 'auth/cancelled-popup-request') {
+            message = "Login popup was closed before completion.";
+        } else if (error.code === 'auth/popup-closed-by-user') {
+            message = "The login window was closed. Please try again.";
+        }
+
+        alert("Google Login Failed: " + message);
         setLoading(false);
     }
   };

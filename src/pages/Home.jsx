@@ -8,6 +8,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useAuthModal } from '../context/AuthModalContext';
+import RecentlyViewed from '../components/home/RecentlyViewed';
 
 const Home = () => {
   const { items, loading, error } = useNearbyItems();
@@ -16,13 +17,16 @@ const Home = () => {
   const { openModal } = useAuthModal();
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-950 transition-colors duration-300">
       
       {/* 1. Hero Section */}
       <HeroSection />
 
       {/* 2. Categories Grid */}
       <CategoriesGrid />
+
+      {/* Recently Viewed (Only shows if there are items) */}
+      <RecentlyViewed />
 
       {/* 3. Trending / Nearby Items (Distinct Background) */}
       <section className="py-20 bg-slate-100 relative">

@@ -4,13 +4,16 @@ import CategoryFilter from '../components/filters/CategoryFilter';
 import PriceFilter from '../components/filters/PriceFilter';
 import DistanceFilter from '../components/filters/DistanceFilter';
 import ItemGrid from '../components/items/ItemGrid';
+import ItemsMap from '../components/items/ItemsMap'; // Import Map
 import { useNearbyItems } from '../hooks/useNearbyItems';
+import { Map, Grid } from 'lucide-react'; // Import Icons
 
 const ItemPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [maxDistance, setMaxDistance] = useState(10); // Default 10km
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'map'
 
   const { items, loading, error } = useNearbyItems();
   
@@ -26,23 +29,6 @@ const ItemPage = () => {
   // Sync Category with Search Query if it matches
   React.useEffect(() => {
     if (searchQuery) {
-        // Simple heuristic: if query is a simple word, try setting it as category
-        // In a real app, check against validCategories list
-        const formatted = searchQuery.charAt(0).toUpperCase() + searchQuery.slice(1).toLowerCase();
-        // Assuming "Mobiles", "Furniture" etc. 
-        // We might want to just set it if it matches known ones, or keep it as text search
-        // For now, let's treat the search param as a potential category trigger
-        // The user specifically asked for "filter category that option be automatically opted"
-        
-        // Let's rely on the CategoryFilter to likely have these options. 
-        // We'll set it, but we need to match the case.
-        // For now, let's just use the query directly if we want to force it, 
-        // OR distinct logic: Only set category if it was explicitly passed as a category intent?
-        // But the previous page sends `?search=categoryID`.
-        
-        // Let's map IDs to display names if needed, or just set raw.
-        // The previous code sent IDs like 'mobiles'. The Filter likely expects 'Mobiles'.
-        
         const categoryMap = {
             'mobiles': 'Mobiles',
             'furniture': 'Furniture',
@@ -72,11 +58,6 @@ const ItemPage = () => {
 
   const filteredItems = items.filter(item => {
     // 1. Search Filter (Global) - ONLY apply if we didn't turn it into a Category selection
-    // If selectedCategory is SET (and not All), we rely on that.
-    // But if the user typed "iPhone", we want text search.
-    // The previous page sends ?search=mobiles.
-    // So if we mapped it to a category, we DON'T do text search on "mobiles" string, 
-    // we just use the category filter.
     
     // Check if current search query matches the selected category (meaning it was a category nav)
     const isCategoryNav = selectedCategory !== 'All' && 
@@ -100,13 +81,31 @@ const ItemPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Browse Items</h1>
+      <div className="flex flex-col md:flex-row justify-between items-end mb-6">
+        <h1 className="text-3xl font-bold dark:text-white">Browse Items</h1>
+        
+        {/* Toggle Grid / Map */}
+        <div className="bg-gray-100 p-1 rounded-lg flex gap-1 mt-4 md:mt-0 dark:bg-slate-800">
+            <button 
+                onClick={() => setViewMode('grid')} 
+                className={`p-2 rounded-md flex items-center gap-2 transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-blue-600 font-semibold dark:bg-slate-700 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}
+            >
+               <Grid size={18} /> <span className="text-sm">Grid</span>
+            </button>
+            <button 
+                onClick={() => setViewMode('map')} 
+                className={`p-2 rounded-md flex items-center gap-2 transition-all ${viewMode === 'map' ? 'bg-white shadow-sm text-blue-600 font-semibold dark:bg-slate-700 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}
+            >
+               <Map size={18} /> <span className="text-sm">Map</span>
+            </button>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Filters Sidebar */}
+        {/* Filters Sidebar - Hide on Map Mode mostly? OR keep it? Keep it. */}
         <div className="lg:col-span-1">
-          <div className="bg-white p-6 rounded-lg shadow sticky top-4">
-            <h2 className="text-xl font-bold mb-4">Filters</h2>
+          <div className="bg-white p-6 rounded-lg shadow sticky top-4 dark:bg-slate-800 dark:shadow-none dark:border dark:border-slate-700">
+            <h2 className="text-xl font-bold mb-4 dark:text-white">Filters</h2>
             <CategoryFilter
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
@@ -123,7 +122,7 @@ const ItemPage = () => {
           </div>
         </div>
 
-        {/* Items Grid */}
+        {/* Items Grid or Map */}
         <div className="lg:col-span-3">
           {loading ? (
              <div className="flex justify-center py-12">
@@ -135,7 +134,14 @@ const ItemPage = () => {
                <p className="text-gray-600">{typeof error === 'string' ? error : 'Please enable location access.'}</p>
             </div>
           ) : (
-            <ItemGrid items={filteredItems} />
+            <>
+                <p className="mb-4 text-gray-500 font-medium dark:text-gray-400">Found {filteredItems.length} items nearby</p>
+                {viewMode === 'grid' ? (
+                    <ItemGrid items={filteredItems} />
+                ) : (
+                    <ItemsMap items={filteredItems} />
+                )}
+            </>
           )}
         </div>
       </div>

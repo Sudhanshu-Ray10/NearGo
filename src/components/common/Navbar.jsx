@@ -25,9 +25,12 @@ import {
 } from "lucide-react";
 
 import { subscribeToNotifications } from "../../services/notificationService";
+import { useTheme } from "../../context/ThemeContext";
+import { Sun, Moon } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const { openModal } = useAuthModal();
   const { totalItems } = useCart();
@@ -283,19 +286,19 @@ const Navbar = () => {
 
   return (
     <>
-    <header className="sticky top-0 z-50 bg-slate-50/90 backdrop-blur-md border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-slate-50/90 backdrop-blur-md border-b border-gray-200 dark:bg-slate-900/90 dark:border-gray-800">
       <div className="w-full px-4 md:px-6 h-16 md:h-20 flex items-center justify-between gap-4">
 
         {/* LEFT & MOBILE MENU TRIGGER */}
         <div className="flex items-center gap-4">
           <button 
-              className="md:hidden text-gray-700 p-1"
+              className="md:hidden text-gray-700 dark:text-gray-200 p-1"
               onClick={() => setMobileMenuOpen(true)}
           >
               <Menu size={24} />
           </button>
           
-          <Link to="/" className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 tracking-tight">
+          <Link to="/" className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 tracking-tight">
             NearBuy
           </Link>
 
@@ -303,17 +306,17 @@ const Navbar = () => {
           <div className="relative hidden md:block">
             <button
               onClick={() => setLocationOpen(!locationOpen)}
-              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-full text-sm hover:shadow-md transition-shadow min-w-[180px] justify-between"
+              className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-full text-sm hover:shadow-md transition-shadow min-w-[180px] justify-between dark:bg-slate-800 dark:border-slate-700 dark:text-gray-200"
             >
               <div className="flex items-center gap-2 overflow-hidden">
                   <MapPin size={18} className="text-blue-500 flex-shrink-0" />
-                  <span className="font-medium text-gray-700 truncate">{selectedLocation}</span>
+                  <span className="font-medium text-gray-700 truncate dark:text-gray-200">{selectedLocation}</span>
               </div>
               <span className="text-gray-400 flex-shrink-0">▼</span>
             </button>
 
             {locationOpen && (
-              <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-xl rounded-2xl p-4 border border-gray-100 animate-in fade-in zoom-in-95 duration-200 flex flex-col gap-3">
+              <div className="absolute top-full left-0 mt-2 w-80 bg-white shadow-xl rounded-2xl p-4 border border-gray-100 animate-in fade-in zoom-in-95 duration-200 flex flex-col gap-3 dark:bg-slate-900 dark:border-gray-800 z-50">
                 {/* Search Input */}
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
@@ -321,7 +324,7 @@ const Navbar = () => {
                     value={locationQuery}
                     onChange={(e) => setLocationQuery(e.target.value)}
                     placeholder="Enter city or pincode"
-                    className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
                     autoFocus
                     />
                 </div>
@@ -329,12 +332,12 @@ const Navbar = () => {
                 <button
                   onClick={handleDetectLocation}
                   disabled={isSearchingPincode}
-                  className="flex items-center gap-3 w-full px-3 py-2 hover:bg-blue-50 text-blue-600 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                  className="flex items-center gap-3 w-full px-3 py-2 hover:bg-blue-50 text-blue-600 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 dark:hover:bg-slate-800 dark:text-blue-400"
                 >
                   {isSearchingPincode && !locationQuery ? <Loader2 className="animate-spin" size={18}/> : <Navigation size={18} />}
                   {"Use my current location"}
                 </button>
-                <div className="h-px bg-gray-100"></div>
+                <div className="h-px bg-gray-100 dark:bg-gray-800"></div>
                 {/* List of Locations */}
                 <div className="max-h-60 overflow-y-auto pr-1 custom-scrollbar">
                {/* Simplified markup for brevity in replacement, essentially same valid list code */}
@@ -344,9 +347,9 @@ const Navbar = () => {
                         <ul className="flex flex-col gap-1">
                             {filteredLocations.map((loc, index) => (
                                 <li key={index}>
-                                    <button onClick={() => handleSelectLocation(loc)} className="flex items-center justify-between w-full px-3 py-2 text-left hover:bg-gray-50 rounded-lg group transition-colors">
-                                        <span className="text-sm text-gray-700 group-hover:text-blue-700">{loc}</span>
-                                        {selectedLocation === loc && <Check size={14} className="text-blue-600"/>}
+                                    <button onClick={() => handleSelectLocation(loc)} className="flex items-center justify-between w-full px-3 py-2 text-left hover:bg-gray-50 rounded-lg group transition-colors dark:hover:bg-slate-800">
+                                        <span className="text-sm text-gray-700 group-hover:text-blue-700 dark:text-gray-300 dark:group-hover:text-blue-400">{loc}</span>
+                                        {selectedLocation === loc && <Check size={14} className="text-blue-600 dark:text-blue-400"/>}
                                     </button>
                                 </li>
                             ))}
@@ -379,22 +382,22 @@ const Navbar = () => {
               onBlur={() => {
                 setTimeout(() => { setSearchFocus(false); setActiveSuggestionIndex(-1); }, 200);
               }}
-              className="w-full pl-14 pr-6 py-3 bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md focus:shadow-lg focus:border-blue-500 outline-none transition-all duration-300 text-gray-700 placeholder-gray-400"
+              className="w-full pl-14 pr-6 py-3 bg-white border border-gray-200 rounded-full shadow-sm hover:shadow-md focus:shadow-lg focus:border-blue-500 outline-none transition-all duration-300 text-gray-700 placeholder-gray-400 dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:placeholder-gray-500"
             />
             
             {/* Search Suggestions Dropdown */}
             {searchFocus && searchQuery && filteredSuggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200 dark:bg-slate-900 dark:border-gray-800">
                 <ul className="py-2">
                   {filteredSuggestions.map((term, index) => (
                     <li key={index}>
                       <button
                         onMouseEnter={() => setActiveSuggestionIndex(index)}
                         onMouseDown={(e) => { e.preventDefault(); handleSearchSubmit(term); }}
-                        className={`w-full text-left px-6 py-2.5 flex items-center gap-3 transition-colors group ${index === activeSuggestionIndex ? "bg-blue-50" : "hover:bg-gray-50"}`}
+                        className={`w-full text-left px-6 py-2.5 flex items-center gap-3 transition-colors group ${index === activeSuggestionIndex ? "bg-blue-50 dark:bg-slate-800" : "hover:bg-gray-50 dark:hover:bg-slate-800"}`}
                       >
                         <Search size={16} className={`group-hover:text-blue-500 ${index === activeSuggestionIndex ? "text-blue-500" : "text-gray-400"}`} />
-                        <span className="font-medium text-gray-900">{term}</span>
+                        <span className="font-medium text-gray-900 dark:text-gray-100">{term}</span>
                       </button>
                     </li>
                   ))}
@@ -407,15 +410,24 @@ const Navbar = () => {
         {/* RIGHT (Desktop) */}
         <div className="hidden md:flex items-center gap-6">
 
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+            title="Toggle Theme"
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
           {/* Notifications */}
           <Link
             to="/notifications"
-            className="relative flex flex-col items-center gap-0.5 text-gray-600 hover:text-yellow-600 transition-colors group"
+            className="relative flex flex-col items-center gap-0.5 text-gray-600 hover:text-yellow-600 transition-colors group dark:text-gray-400 dark:hover:text-yellow-400"
           >
-            <div className="p-2 rounded-full group-hover:bg-yellow-50 transition-colors">
+            <div className="p-2 rounded-full group-hover:bg-yellow-50 dark:group-hover:bg-yellow-900/30 transition-colors">
                 <Bell size={20} className="group-hover:scale-110 transition-transform" />
                 {unreadNotifications > 0 && (
-                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white dark:border-slate-900">
                         {unreadNotifications}
                     </span>
                 )}
@@ -426,12 +438,12 @@ const Navbar = () => {
           {/* Cart */}
           <Link
             to="/cart"
-            className="relative flex flex-col items-center gap-0.5 text-gray-600 hover:text-blue-600 transition-colors group"
+            className="relative flex flex-col items-center gap-0.5 text-gray-600 hover:text-blue-600 transition-colors group dark:text-gray-400 dark:hover:text-blue-400"
           >
-            <div className="p-2 rounded-full group-hover:bg-blue-50 transition-colors">
+            <div className="p-2 rounded-full group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors">
                 <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" />
                 {totalItems > 0 && (
-                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white">
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white dark:border-slate-900">
                         {totalItems}
                     </span>
                 )}
@@ -442,7 +454,7 @@ const Navbar = () => {
           {/* Sell Button */}
           <button
             onClick={() => requireAuth("/sell")}
-            className="flex items-center gap-2 px-6 py-2.5 border-2 border-indigo-600 text-indigo-600 rounded-full font-bold uppercase tracking-wider text-sm hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-indigo-200 hover:shadow-lg active:scale-95"
+            className="flex items-center gap-2 px-6 py-2.5 border-2 border-indigo-600 text-indigo-600 rounded-full font-bold uppercase tracking-wider text-sm hover:bg-indigo-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-indigo-200 hover:shadow-lg active:scale-95 dark:border-indigo-400 dark:text-indigo-400 dark:hover:bg-indigo-500 dark:hover:text-white"
           >
             <Plus size={18} strokeWidth={3} />
             Sell
@@ -452,77 +464,77 @@ const Navbar = () => {
           {!user ? (
             <button
               onClick={openModal}
-              className="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 shadow-md hover:shadow-lg transition-all"
+              className="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 shadow-md hover:shadow-lg transition-all dark:bg-blue-600 dark:hover:bg-blue-500"
             >
               Login
             </button>
           ) : (
             <div className="relative group z-50">
                 {/* Header: User Name + Icon */}
-               <div className="flex items-center gap-3 cursor-pointer py-1 pr-2 rounded-full hover:bg-white/80 border border-transparent hover:border-gray-100 transition-all">
+               <div className="flex items-center gap-3 cursor-pointer py-1 pr-2 rounded-full hover:bg-white/80 border border-transparent hover:border-gray-100 transition-all dark:hover:bg-slate-800 dark:hover:border-slate-700">
                   <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-tr from-blue-600 to-purple-600 text-white rounded-full shadow-md">
                     <User size={20} />
                   </div>
                   <div className="hidden lg:block text-left">
-                      <p className="text-sm font-bold text-gray-800 leading-tight">
+                      <p className="text-sm font-bold text-gray-800 leading-tight dark:text-gray-200">
                           {user.displayName || "User"}
                       </p>
-                      <p className="text-[10px] font-medium text-gray-500">My Account</p>
+                      <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400">My Account</p>
                   </div>
               </div>
 
               {/* Dropdown Menu */}
-              <div className="absolute right-0 top-full mt-2 w-64 bg-white shadow-xl rounded-2xl p-2 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transform origin-top-right transition-all duration-200">
-                <div className="px-4 py-3 bg-gray-50 rounded-xl mb-2">
-                    <p className="text-xs text-gray-500 font-medium">Signed in as</p>
-                    <p className="text-sm font-bold text-gray-900 truncate">{user.phoneNumber || user.email}</p>
+              <div className="absolute right-0 top-full mt-2 w-64 bg-white shadow-xl rounded-2xl p-2 border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transform origin-top-right transition-all duration-200 dark:bg-slate-900 dark:border-gray-800">
+                <div className="px-4 py-3 bg-gray-50 rounded-xl mb-2 dark:bg-slate-800">
+                    <p className="text-xs text-gray-500 font-medium dark:text-gray-400">Signed in as</p>
+                    <p className="text-sm font-bold text-gray-900 truncate dark:text-white">{user.phoneNumber || user.email}</p>
                 </div>
                 
                 <Link
                   to="/profile"
-                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item"
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                 >
-                  <User size={18} className="text-gray-400 group-hover/item:text-blue-600"/>
+                  <User size={18} className="text-gray-400 group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400"/>
                   My Profile
                 </Link>
 
                 <Link
                   to="/chat"
-                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item"
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                 >
-                  <MessageCircle size={18} className="text-gray-400 group-hover/item:text-blue-600"/>
+                  <MessageCircle size={18} className="text-gray-400 group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400"/>
                   My Chats
                 </Link>
 
                 <Link
                   to="/orders"
-                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item"
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-blue-50 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-colors group/item dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-blue-400"
                 >
-                  <Package size={18} className="text-gray-400 group-hover/item:text-blue-600"/>
+                  <Package size={18} className="text-gray-400 group-hover/item:text-blue-600 dark:group-hover/item:text-blue-400"/>
                   My Orders
                 </Link>
                 
                 <Link
                   to="/wishlist"
-                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-pink-50 rounded-xl text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors group/item"
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-pink-50 rounded-xl text-sm font-medium text-gray-700 hover:text-pink-600 transition-colors group/item dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-pink-400"
                 >
-                  <Heart size={18} className="text-gray-400 group-hover/item:text-pink-500"/>
+                  <Heart size={18} className="text-gray-400 group-hover/item:text-pink-500 dark:group-hover/item:text-pink-400"/>
                   Wishlist
                 </Link>
                 
                 <Link
                   to="/notifications"
-                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-yellow-50 rounded-xl text-sm font-medium text-gray-700 hover:text-yellow-600 transition-colors group/item"
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-yellow-50 rounded-xl text-sm font-medium text-gray-700 hover:text-yellow-600 transition-colors group/item dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-yellow-400"
                 >
-                  <Bell size={18} className="text-gray-400 group-hover/item:text-yellow-500"/>
+                  <Bell size={18} className="text-gray-400 group-hover/item:text-yellow-500 dark:group-hover/item:text-yellow-400"/>
                   Notifications
                 </Link>
 
-                <div className="h-px bg-gray-100 my-1"></div>
+                <div className="h-px bg-gray-100 my-1 dark:bg-gray-800"></div>
                 
                 <button
                   onClick={logout}
-                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-red-50 text-red-600 rounded-xl text-sm font-medium transition-colors group/item"
+                  className="flex items-center gap-3 w-full px-4 py-3 hover:bg-red-50 text-red-600 rounded-xl text-sm font-medium transition-colors group/item dark:hover:bg-red-900/20"
                 >
                   <LogOut size={18} className="group-hover/item:text-red-500"/>
                   Logout

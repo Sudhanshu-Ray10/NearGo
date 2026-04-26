@@ -8,24 +8,27 @@ import { ItemProvider } from './context/ItemContext';
 import { WishlistProvider } from './context/WishlistContext';
 import AuthModal from './components/auth/AuthModal';
 import AppRoutes from './routes/AppRoutes';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <LocationProvider>
-          <AuthModalProvider>
-            <CartProvider>
-              <ItemProvider>
-                <WishlistProvider>
-                  <AppRoutes />
-                  <AuthModal />
-                </WishlistProvider>
-              </ItemProvider>
-            </CartProvider>
-          </AuthModalProvider>
-        </LocationProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <LocationProvider>
+            <AuthModalProvider>
+              <CartProvider>
+                <ItemProvider>
+                  <WishlistProvider>
+                    <AppRoutes />
+                    <AuthModal />
+                  </WishlistProvider>
+                </ItemProvider>
+              </CartProvider>
+            </AuthModalProvider>
+          </LocationProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </Router>
   );
 }
