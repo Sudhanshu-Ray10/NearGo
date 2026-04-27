@@ -45,6 +45,7 @@ const ItemDetails = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const fetchItem = async () => {
       try {
         const docRef = doc(db, 'items', id);
