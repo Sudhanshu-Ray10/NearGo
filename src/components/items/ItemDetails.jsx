@@ -26,6 +26,23 @@ const ItemDetails = () => {
   
   // Carousel State
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+    if (distance > minSwipeDistance) nextImage();
+    if (distance < -minSwipeDistance) prevImage();
+  };
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -147,11 +164,16 @@ const ItemDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2">
             
             {/* 1. Image Carousel Section */}
-            <div className="bg-gray-100 relative group h-[400px] lg:h-full dark:bg-slate-900">
+            <div 
+                className="bg-gray-100 relative group h-[400px] lg:h-full dark:bg-slate-900 overflow-hidden"
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+            >
                  <img
                     src={displayImages[currentImageIndex]}
                     alt={item.title}
-                    className="w-full h-full object-cover transition-opacity duration-300"
+                    className="w-full h-full object-cover transition-all duration-500 ease-in-out"
                 />
                 
                 {/* Carousel Controls */}
@@ -159,28 +181,34 @@ const ItemDetails = () => {
                     <>
                         <button 
                             onClick={prevImage}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full hover:bg-white text-gray-800 shadow-lg opacity-0 group-hover:opacity-100 transition-all active:scale-95 dark:bg-slate-800/80 dark:text-white dark:hover:bg-slate-800"
+                            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md p-3 rounded-full hover:bg-white text-gray-800 shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all active:scale-95 dark:bg-slate-800/90 dark:text-white dark:hover:bg-slate-800 z-10"
                         >
                             <ChevronLeft size={24} />
                         </button>
                         <button 
                             onClick={nextImage}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-3 rounded-full hover:bg-white text-gray-800 shadow-lg opacity-0 group-hover:opacity-100 transition-all active:scale-95 dark:bg-slate-800/80 dark:text-white dark:hover:bg-slate-800"
+                            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-md p-3 rounded-full hover:bg-white text-gray-800 shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all active:scale-95 dark:bg-slate-800/90 dark:text-white dark:hover:bg-slate-800 z-10"
                         >
                             <ChevronRight size={24} />
                         </button>
                         
                         {/* Dots Indicator */}
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
                             {displayImages.map((_, idx) => (
                                 <button
                                     key={idx}
                                     onClick={() => setCurrentImageIndex(idx)}
-                                    className={`w-2 h-2 rounded-full transition-all ${
-                                        idx === currentImageIndex ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/80'
+                                    className={`h-2.5 rounded-full transition-all duration-300 ${
+                                        idx === currentImageIndex ? 'bg-white w-8 shadow-sm' : 'bg-white/40 hover:bg-white/60 w-2.5'
                                     }`}
+                                    aria-label={`Go to image ${idx + 1}`}
                                 />
                             ))}
+                        </div>
+                        
+                        {/* Image Counter (Mobile Friendly) */}
+                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-bold tracking-wider">
+                            {currentImageIndex + 1} / {displayImages.length}
                         </div>
                     </>
                 )}
