@@ -76,7 +76,7 @@ const Home = () => {
       <FeaturesSection />
 
       {/* 5. Quick CTA (Floating Card Style) */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4 bg-white">
         <div className="container mx-auto max-w-5xl">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[2.5rem] p-12 md:p-16 text-center text-white relative overflow-hidden shadow-2xl">
                 {/* Decorative circles */}
